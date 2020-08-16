@@ -2,6 +2,8 @@ package com.Examen3P2.graphql.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 
 @Entity
@@ -30,7 +38,7 @@ public class Movie implements Serializable {
 	private String language;
 	
 	@Column(name = "release_date")
-	private LocalDate release;
+	private Date release;
 	
 	@Transient
 	private int day;
@@ -43,17 +51,18 @@ public class Movie implements Serializable {
 	
 	@PostLoad
 	public void postLoad() {
-		LocalDate today = release;
-		this.year = today.getYear();
-		this.month = today.getMonthValue();
-		this.day = today.getDayOfMonth();
+		Calendar cal = Calendar.getInstance();
+	      cal.setTime(release);
+		this.year = cal.get(Calendar.YEAR);
+		this.month = cal.get(Calendar.MONTH);
+		this.day = cal.get(Calendar.DATE);
 	}
 
 	public int getYear() {
 		return year;
 	}
 
-	public Movie(String title, int budget, double runtime, String language, LocalDate release) {
+	public Movie(String title, int budget, double runtime, String language, Date release) {
 		super();
 		this.title = title;
 		this.budget = budget;
@@ -99,11 +108,11 @@ public class Movie implements Serializable {
 		this.language = language;
 	}
 
-	public LocalDate getRelease() {
+	public Date getRelease() {
 		return release;
 	}
 
-	public void setRelease(LocalDate release) {
+	public void setRelease(Date release) {
 		this.release = release;
 	}
 
