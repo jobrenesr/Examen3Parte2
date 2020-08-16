@@ -1,0 +1,23 @@
+type Movie {
+	title: ID!,
+	budget: Int,
+	runtime: Int,
+	language: String,
+	release: String,
+	year: Int
+}
+
+type Query {
+	movies:[Movie]
+	movie(title : ID):Movie
+	moviesByYear(year : Int):[Movie]
+	moviesByTitle(title : String):[Movie]
+}
+
+
+type Mutation{
+
+	createMovie(title : String, budget: Int, runtime : Int, language : String, release : String): Movie
+	updateMovie(title : String, budget: Int, runtime :  Int, language : String, release : String ): Movie
+	deleteMovie(title : String): Movie
+}
